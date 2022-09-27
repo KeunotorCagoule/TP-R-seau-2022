@@ -105,6 +105,6 @@ Sous Windows
 </div>
 
 
-```
+```bash
 Il est possible de perdre l'accès à internet si l'adresse IP a déjà été selectionnée, la première personne a avoir choisi l'adresse IP sera prioritaire et la deuxième n'aura donc plus de réseau.
 ```
