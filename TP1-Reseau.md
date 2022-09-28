@@ -300,6 +300,65 @@ Configuration IP de Windows
 ## 2 - DNS
 
 ```bash
+# adresse du serveur DNS que connait mon ordinateur
+Carte réseau sans fil Wi-Fi :
 
+[...]
+   Serveurs DNS. . .  . . . . . . . . . . : 8.8.8.8
+                                       8.8.4.4
+                                       1.1.1.1
 ```
 
+```bash
+# affichage de l'adresse IP de google.com, on fait la requête au serveur DNS de google, l'adresse IP de google.com est 142.250.75.228. 
+
+C:\Users\33785>nslookup www.google.com
+Serveur :   dns.google
+Address:  8.8.8.8
+
+Réponse ne faisant pas autorité :
+Nom :    www.google.com
+Addresses:  2a00:1450:4007:80d::2004
+          142.250.75.228
+```
+
+```bash
+# affichage de l'adresse IP d'ynov.com, on fait la requête au serveur DNS de google, l'adresse IP d'ynov.com est 104.26.10.233.
+
+C:\Users\33785>nslookup www.ynov.com
+Serveur :   dns.google
+Address:  8.8.8.8
+
+Réponse ne faisant pas autorité :
+Nom :    www.ynov.com
+Addresses:  2606:4700:20::ac43:4ae2
+          2606:4700:20::681a:be9
+          2606:4700:20::681a:ae9
+          172.67.74.226
+          104.26.11.233
+          104.26.10.233
+```
+
+```bash
+L'adresse IP du serveur auprès duquel on fait des requêtes est celle du serveur DNS de google, 8.8.8.8
+```
+
+```bash
+# le nom de domaine associé à l'adresse IP est host-78-74-21-21.homerun.telia.com
+C:\Users\33785>nslookup 78.74.21.21
+Serveur :   dns.google
+Address:  8.8.8.8
+
+Nom :    host-78-74-21-21.homerun.telia.com
+Address:  78.74.21.21
+```
+
+```bash
+# il n'y a pas de nom de domaine associé à cette adresse IP
+
+C:\Users\33785>nslookup 92.146.54.88
+Serveur :   dns.google
+Address:  8.8.8.8
+
+*** dns.google ne parvient pas à trouver 92.146.54.88 : Non-existent domain
+```
