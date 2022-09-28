@@ -363,6 +363,25 @@ Address:  8.8.8.8
 *** dns.google ne parvient pas à trouver 92.146.54.88 : Non-existent domain
 ```
 
+## 6 - Firewall
+
+```bash
+# changement des deux pc entre temps puisqu'on ne pouvait pas installer netcat sur le pc qu'on nous avait prêté
+```
+
+```bash
+# ipv4 indique le type de règle, -p icmp inidque le port ou protocole et les deux ip permetttent d'autoriser la source et la destination pour n'importe qui
+
+$ sudo firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 0 -p icmp -s 0.0.0.0/0 -d 0.0.0.0/0 -j ACCEPT
+$ sudo systemctl restart firewalld.service
+```
+
+```bash
+# permet d'autoriser le port netcat
+
+$ sudo firewall-cmd --add-port=8888/tcp --permanent && sudo firewall-cmd --add-port=8888/udp --permanent && sudo systemctl restart firwalld
+```
+
 # IV - Wireshark
 
 ```bash
