@@ -362,3 +362,47 @@ Address:  8.8.8.8
 
 *** dns.google ne parvient pas à trouver 92.146.54.88 : Non-existent domain
 ```
+
+# IV - Wireshark
+
+```bash
+# changement d'adresse IP parce que je ne suis pas à Ynov (c'est plus pour que je m'en souvienne qu'autre chose)
+
+C:\Users\33785>ipconfig
+
+Configuration IP de Windows
+
+[...]
+
+Carte réseau sans fil Wi-Fi :
+
+   Suffixe DNS propre à la connexion. . . :
+   Adresse IPv6. . . . . . . . . . . . . .: 2a04:cec0:1139:cd55:7938:13dc:dac0:406
+   Adresse IPv6 temporaire . . . . . . . .: 2a04:cec0:1139:cd55:c9b0:a197:7de2:6976
+   Adresse IPv6 de liaison locale. . . . .: fe80::7938:13dc:dac0:406%20
+   Adresse IPv4. . . . . . . . . . . . . .: 192.168.43.114
+   Masque de sous-réseau. . . . . . . . . : 255.255.255.0
+   Passerelle par défaut. . . . . . . . . : fe80::9fc4:fa7a:e4:6fe1%20
+                                       192.168.43.1
+```
+
+```bash
+# ping vers la passerelle
+
+C:\Users\33785>ping 192.168.43.1
+
+Envoi d’une requête 'Ping'  192.168.43.1 avec 32 octets de données :
+Réponse de 192.168.43.1 : octets=32 temps=2 ms TTL=64
+Réponse de 192.168.43.1 : octets=32 temps=4 ms TTL=64
+Réponse de 192.168.43.1 : octets=32 temps=3 ms TTL=64
+Réponse de 192.168.43.1 : octets=32 temps=8 ms TTL=64
+
+Statistiques Ping pour 192.168.43.1:
+    Paquets : envoyés = 4, reçus = 4, perdus = 0 (perte 0%),
+Durée approximative des boucles en millisecondes :
+    Minimum = 2ms, Maximum = 8ms, Moyenne = 4ms
+```
+
+<div align="center">
+<img src="./assets/ping.png" alt="Ping client vers passerelle">
+</div>
