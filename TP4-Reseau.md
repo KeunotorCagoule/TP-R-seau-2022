@@ -21,10 +21,10 @@ Faites-vous un petit top 5 des applications que vous utilisez sur votre PC souve
 
 
 ```bash
-Site : ffe.com
-IP : 37.59.189.168
-Src Port : 7293
-Dst Port : 443
+Site : Spotify
+IP : 104.199.65.124
+Src Port : 3311
+Dst Port : 4070
 Protocole : TCP
 ```
 
@@ -37,26 +37,26 @@ Protocole : TCP
 ```
 
 ```bash
-Site : youtube.com
-IP : 142.250.75.238
-Src Port : 51628
-Dst Port : 443
-Protocole : UDP
-```
-
-```bash
-Site : Netflix
-IP : 92.90.254.205
-Src Port : 23997
+Site : Telegram
+IP : 95.100.95.167
+Src Port : 1110
 Dst Port : 443
 Protocole : TCP
 ```
 
 ```bash
-Site : https://agence-raid.fr/
-IP : 217.160.0.76
-Src Port : 24066
+Site : telemat.org
+IP : 217.69.21.67
+Src Port : 3681
 Dst Port : 443
+Protocole : TCP
+```
+
+```bash
+Site : Star Stable
+IP : 18.66.2.115
+Src Port : 8540
+Dst Port : 80
 Protocole : TCP
 ```
 
@@ -85,11 +85,50 @@ $ ss
 $ netstat
 ```
 
+```bash
+# Spotify
+C:\Users\33785>netstat -an | findstr 4070
+  TCP    192.168.1.20:3311      104.199.65.124:4070    ESTABLISHED
+```
+[Dump Spotify](./filesTP4/spotify.pcapng)
+
+```bash
+# Discord
+C:\Users\33785>netstat -an | findstr 162.159
+  TCP    192.168.1.20:1024      162.159.136.234:https  ESTABLISHED
+```
+[Dump Discord](./filesTP4/discorddeux.pcapng)
+
+```bash
+# Telegram
+C:\Users\33785>netstat -an | findstr 1110
+  TCP    192.168.1.20:1110      95.100.95.167:443      ESTABLISHED
+```
+[Dump Telegram](./filesTP4/telegram.pcapng)
+
+```bash
+# Telemat
+C:\Users\33785>netstat -an | findstr 217.69.21.67
+  TCP    192.168.1.20:3681      217.69.21.67:443       CLOSE_WAIT
+  TCP    192.168.1.20:3684      217.69.21.67:443       CLOSE_WAIT
+
+# les sessions HTTP sont terminées, les données sont envoyées, c'est pour ça que l'état est en CLOSE_WAIT
+```
+[Dump Telemat](./filesTP4/telemat.pcapng)
+
+```bash
+# Star Stable
+C:\Users\33785>netstat -an | findstr 18.66.2.115
+  TCP    192.168.1.20:8540      18.66.2.115:80         ESTABLISHED
+```
+[Dump Star Stable](./filesTP4/starstable.pcapng)
+
 🦈🦈🦈🦈🦈 **Bah ouais, captures Wireshark à l'appui évidemment.** Une capture pour chaque application, qui met bien en évidence le trafic en question.
 
 # II. Mise en place
 
 Allumez une VM Linux pour la suite.
+
 
 ## 1. SSH
 
@@ -100,15 +139,26 @@ Connectez-vous en SSH à votre VM.
 - donnez un sens aux infos devant vos yeux, capturez un peu de trafic, et coupez la capture, sélectionnez une trame random et regardez dedans, vous laissez pas brainfuck par Wireshark n_n
 - **déterminez si SSH utilise TCP ou UDP**
   - pareil réfléchissez-y deux minutes, logique qu'on utilise pas UDP non ?
+```bash
+# on utilise le protocole TCP pour avoir confirmation de la reception des paquets
+```
 - **repérez le *3-Way Handshake* à l'établissement de la connexion**
   - c'est le `SYN` `SYNACK` `ACK`
 - **repérez le FIN FINACK à la fin d'une connexion**
 - entre le *3-way handshake* et l'échange `FIN`, c'est juste une bouillie de caca chiffré, dans un tunnel TCP
 
+[Dump Syn/Synack/Ack + Fin](./filesTP4/synsynack.pcapng)
+
+```bash
+Malgré plusieurs essais, impossible d'obtenir un FINACK, la session se termine juste par un reset
+```
+
+
 🌞 **Demandez aux OS**
 
 - repérez, avec un commande adaptée, la connexion SSH depuis votre machine
 - ET repérez la connexion SSH depuis votre VM
+
 
 ```
 # MacOS
@@ -119,6 +169,19 @@ $ ss
 
 # Windows
 $ netstat
+```
+
+```bash
+# depuis ma machine
+C:\Users\33785>netstat -an | findstr 22
+  TCP    10.3.1.11:1633         10.3.1.13:22           ESTABLISHED
+```
+
+```bash
+# depuis ma VM
+[roxanne@localhost ~]$ netstat -an | grep 22
+[...]
+tcp        0     52 10.3.1.13:22            10.3.1.11:1633          ESTABLISHED
 ```
 
 🦈 **Je veux une capture clean avec le 3-way handshake, un peu de trafic au milieu et une fin de connexion**
@@ -136,6 +199,8 @@ Une de vos VMs portera donc le serveur NFS, et l'autre utilisera un dossier à t
 - j'vais pas ré-écrire la roue, google it, ou [go ici](https://www.server-world.info/en/note?os=Rocky_Linux_8&p=nfs&f=1)
 - partagez un dossier que vous avez créé au préalable dans `/srv`
 - vérifiez que vous accédez à ce dossier avec l'autre machine : [le client NFS](https://www.server-world.info/en/note?os=Rocky_Linux_8&p=nfs&f=2)
+
+
 
 > Si besoin, comme d'hab, je peux aider à la compréhension, n'hésitez pas à m'appeler.
 
